@@ -572,6 +572,21 @@
     gap: 2rem;
   }
 
+  .product-detail-image {
+    order: -1; /* Move a imagem para o topo no mobile */
+    margin-bottom: 2rem;
+  }
+
+  .product-detail-image img {
+    width: 100%;
+    max-width: 100%; /* Permite que a imagem ocupe toda a largura disponível */
+    height: auto; /* Mantém a proporção */
+    min-height: 300px; /* Define uma altura mínima para evitar imagens muito pequenas */
+    object-fit: contain;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+  }
+
   .product-detail-info h1 {
     font-size: 2rem;
   }
