@@ -61,6 +61,11 @@
   line-height: 1.7;
   color: rgba(255, 193, 7, 0.85);
   font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+.footer .texto-branco{
+  color: white;
 }
 
 .footer-section a {
@@ -74,6 +79,78 @@
 .footer-section a:hover {
   color: rgba(255, 193, 7, 0.7);
   transform: translateX(5px);
+}
+
+.footer-section a.whatsapp-button {
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  padding: 6px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 10px;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+  transition: all 0.3s ease;
+}
+
+.footer-section a.whatsapp-button img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
+.footer-section a.whatsapp-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
+.footer-section a.instagram-button {
+  background: linear-gradient(135deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+  padding: 6px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 10px;
+  box-shadow: 0 2px 8px rgba(193, 53, 132, 0.3);
+  transition: all 0.3s ease;
+}
+
+.footer-section a.instagram-button img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
+.footer-section a.instagram-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(193, 53, 132, 0.4);
+}
+
+.footer-section a.email-button {
+  background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
+  padding: 6px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 10px;
+  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+  transition: all 0.3s ease;
+  color: white;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.footer-section a.email-button img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
+.footer-section a.email-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
 }
 
 /* Mapa */

@@ -82,7 +82,7 @@ const ProductDetail = () => {
             <div className="product-price-section">
               <span className="product-price-label">Preço: </span>
               <span className="product-price-value">
-                R$ {product.price.toFixed(2).replace('.', ',')}
+                R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
 
@@ -172,7 +172,7 @@ const ProductDetail = () => {
                   <img src={relatedProduct.image} alt={relatedProduct.name} />
                   <h4>{relatedProduct.name}</h4>
                   <p className="related-price">
-                    R$ {relatedProduct.price.toFixed(2).replace('.', ',')}
+                    R$ {relatedProduct.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
               ))}

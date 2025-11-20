@@ -1,25 +1,44 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { useFrete } from '../hooks/useFrete';
 import './Cart.css';
 
 const Cart = () => {
   const navigate = useNavigate();
   const { cart, removeFromCart, updateQuantity, clearCart, getTotalPrice } = useCart();
 
-  // Efeito para rolar para o topo quando o componente é montado
+  // Estados do CEP e frete
+  const [cep, setCep] = useState("");
+  const [freteValor, setFreteValor] = useState<string | null>(null);
+  const [fretePrazo, setFretePrazo] = useState<string | null>(null);
+
+  const { calcularFrete } = useFrete();
+
+  const handleCalcularFrete = async () => {
+    if (!cep || cep.length < 8) {
+      alert("Digite um CEP válido!");
+      return;
+    }
+
+    const frete = await calcularFrete(cep);
+
+    setFreteValor(frete.valor);
+    setFretePrazo(String(frete.prazo));
+  };
+
+  // Efeito para rolar a página ao topo
   useEffect(() => {
-    // Força o scroll para o topo imediatamente quando o componente é montado
     window.scrollTo(0, 0);
   }, []);
 
   const handleCheckout = () => {
     if (cart.length === 0) return;
-    
+
     alert('Funcionalidade de pagamento em desenvolvimento! 🚧\n\nEm breve você poderá finalizar sua compra.');
-    // Aqui você implementaria a lógica de checkout/pagamento
   };
 
+  // Se o carrinho estiver vazio
   if (cart.length === 0) {
     return (
       <div className="empty-cart">
@@ -44,27 +63,32 @@ const Cart = () => {
         </div>
 
         <div className="cart-content">
+          {/* LISTA DE PRODUTOS */}
           <div className="cart-items">
             {cart.map(item => (
               <div key={item.id} className="cart-item">
                 <img src={item.image} alt={item.name} className="cart-item-image" />
-                
+
                 <div className="cart-item-info">
                   <h3>{item.name}</h3>
+
                   <p className="cart-item-category">
                     {item.category === 'smartphone' ? (item.brand || 'Smartphone') : 'Acessório'}
                   </p>
+
                   {item.selectedColor && (
                     <p className="cart-item-color">
                       Cor: {item.selectedColor}
                     </p>
                   )}
+
                   <p className="cart-item-price">
-                    R$ {item.price.toFixed(2).replace('.', ',')}
+                    R$ {item.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </p>
                 </div>
 
                 <div className="cart-item-actions">
+                  {/* Botões de quantidade */}
                   <div className="quantity-controls">
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity - 1, item.selectedColor)}
@@ -72,7 +96,9 @@ const Cart = () => {
                     >
                       -
                     </button>
+
                     <span className="quantity-value">{item.quantity}</span>
+
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity + 1, item.selectedColor)}
                       className="quantity-button"
@@ -82,17 +108,20 @@ const Cart = () => {
                     </button>
                   </div>
 
+                  {/* Subtotal */}
                   <div className="cart-item-total">
-                    <span className="total-label">Subtotal:  </span>
+                    <span className="total-label">Subtotal: </span>
                     <span className="total-value">
-                      R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}
+                      R$ {(item.price * item.quantity).toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2
+                      })}
                     </span>
                   </div>
 
+                  {/* Remover */}
                   <button
                     onClick={() => removeFromCart(item.id, item.selectedColor)}
                     className="remove-button"
-                    title="Remover item"
                   >
                     Remover
                   </button>
@@ -101,22 +130,64 @@ const Cart = () => {
             ))}
           </div>
 
+          {/* RESUMO DO PEDIDO */}
           <aside className="cart-summary">
             <h2>Resumo do Pedido</h2>
 
             <div className="summary-details">
+
+              {/* Subtotal */}
               <div className="summary-row">
-                <span>Subtotal:  </span>
-                <span>R$ {getTotalPrice().toFixed(2).replace('.', ',')}</span>
+                <span>Subtotal:</span>
+                <span>
+                  R$ {getTotalPrice().toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </span>
               </div>
-              <div className="summary-row">
-                <span>Frete:</span>
-                <span className="free-shipping">Grátis</span>
+
+              {/* Campo de CEP */}
+              <div className="summary-row cep-row">
+                <input
+                  type="text"
+                  placeholder="Digite seu CEP"
+                  value={cep}
+                  onChange={(e) => setCep(e.target.value)}
+                  className="cep-input"
+                />
+
+                <button onClick={handleCalcularFrete} className="cep-button">
+                  Calcular
+                </button>
               </div>
+
+              {/* Resultado do frete */}
+              {freteValor && (
+                <>
+                  <div className="summary-row">
+                    <span>Frete:</span>
+                    <span>R$ {freteValor}</span>
+                  </div>
+
+                  <div className="summary-row">
+                    <span>Prazo:</span>
+                    <span>{fretePrazo} dias úteis</span>
+                  </div>
+                </>
+              )}
+
               <div className="summary-divider"></div>
+
+              {/* TOTAL */}
               <div className="summary-row summary-total">
-                <span>Total:  </span>
-                <span>R$ {getTotalPrice().toFixed(2).replace('.', ',')}</span>
+                <span>Total:</span>
+                <span>
+                  R$ {(
+                    getTotalPrice() +
+                    (freteValor ? parseFloat(freteValor.replace(",", ".")) : 0)
+                  ).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
               </div>
             </div>
 
@@ -132,10 +203,11 @@ const Cart = () => {
             </button>
 
             <div className="cart-benefits">
-              <p>Frete grátis para todo Brasil.</p>
+              <p>Envio rápido para todo Brasil.</p>
               <p>Parcelamento em até 12x sem juros.</p>
               <p>Garantia em todos os produtos.</p>
             </div>
+
           </aside>
         </div>
       </div>

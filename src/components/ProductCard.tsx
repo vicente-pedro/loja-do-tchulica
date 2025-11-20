@@ -42,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <div className="product-info">
         <h3 className="product-name">{product.name}</h3>
         <p className="product-price">
-          R$ {product.price.toFixed(2).replace('.', ',')}
+          R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </p>
 
         {/* Seção de cores (se disponível) */}

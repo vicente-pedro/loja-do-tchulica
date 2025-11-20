@@ -278,7 +278,7 @@ const Admin: React.FC = () => {
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <p className="category">{product.category === 'smartphone' ? 'Smartphone' : 'Acessório'}</p>
-                  <p className="price">R$ {product.price.toFixed(2).replace('.', ',')}</p>
+                  <p className="price">R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                   <p className="stock">Estoque: {product.stock}</p>
                 </div>
                 <div className="product-actions">
